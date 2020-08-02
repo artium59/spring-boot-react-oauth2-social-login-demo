@@ -11,6 +11,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/*
+  OAuth2User
+    - A representation of a user Principal that is registered with a standard OAuth 2.0 Provider.
+    - Each user attribute has a "name(key)" and "value" and is keyed by the "name" in getAttributes() (return Map).
+      ex) first name: John, email: abc@abc.com, etc...
+
+  UserDetails
+    - Provides core user information.
+    - Implementations are not used directly by Spring Security for security purposes.
+    - This allows non-security related user information (such as email addresses, telephone numbers etc)
+      to be stored in a convenient location.
+    - 
+*/
+
 public class UserPrincipal implements OAuth2User, UserDetails {
     private Long id;
     private String email;
