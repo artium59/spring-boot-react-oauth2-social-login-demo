@@ -27,20 +27,25 @@ public class TokenProvider {
         Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
 
         return Jwts.builder()
+                // sub
                 .setSubject(Long.toString(userPrincipal.getId()))
+                // iat: JWT 발급 시간
                 .setIssuedAt(new Date())
+                // exp: JWT 만료 시간
                 .setExpiration(expiryDate)
+                // PAYLOAD에 email data 추가
+                .claim("email", userPrincipal.getEmail())
+                // VERIFY SIGNATURE: HMACSHA512방식으로 your-256-bit-secret을 통해 암호화
                 .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
                 .compact();
     }
 
-    public Long getUserIdFromToken(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(appProperties.getAuth().getTokenSecret())
-                .parseClaimsJws(token)
-                .getBody();
+    public String getUidFromJwtToken(String token) {
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+    }
 
-        return Long.parseLong(claims.getSubject());
+    public String getEmailFromJwtToken(String token) {
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("email", String.class);
     }
 
     public boolean validateToken(String authToken) {
