@@ -35,8 +35,10 @@ import java.lang.annotation.*;
 // 문서에도 어노테이션의 정보가 표현
 @Documented
 
-// ??
+// Authentication.getPrincipal()을 메서드 인수로 사용하는 데 사용되는 주석
 @AuthenticationPrincipal
+
+// 새로운 annotation, @CurrentUser 를 만듦
 public @interface CurrentUser {
 
 }
